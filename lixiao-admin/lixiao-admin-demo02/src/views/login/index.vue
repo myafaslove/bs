@@ -3,7 +3,7 @@
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">毕业生离校管理系统</h3>
       </div>
 
       <el-form-item prop="username">
@@ -21,6 +21,7 @@
         />
       </el-form-item>
 
+      <el-tooltip v-model="capsTooltip" content="大写锁已打开" placement="right" manual>
       <el-form-item prop="password">
         <span class="svg-container">
           <svg-icon icon-class="password" />
@@ -35,11 +36,16 @@
           tabindex="2"
           auto-complete="on"
           @keyup.enter.native="handleLogin"
+          @keyup.native="checkCapslock"
+          @blur="capsTooltip = false"
         />
         <span class="show-pwd" @click="showPwd">
           <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
         </span>
       </el-form-item>
+      </el-tooltip>
+
+
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">Login</el-button>
 
@@ -83,7 +89,14 @@ export default {
       },
       loading: false,
       passwordType: 'password',
-      redirect: undefined
+      redirect: undefined,
+      capsTooltip: false,
+      otherQuery: {},
+        background: {
+          backgroundImage: "url(" + require("../../assets/bg7.jpg") + ")",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "100% 100%"
+        }
     }
   },
   watch: {
@@ -95,6 +108,12 @@ export default {
     }
   },
   methods: {
+    //检查大小写开关
+    checkCapslock(e) {
+        const { key } = e
+        this.capsTooltip = key && key.length === 1 && (key >= 'A' && key <= 'Z')
+    },
+    //显示密码
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -105,6 +124,7 @@ export default {
         this.$refs.password.focus()
       })
     },
+    //处理登录
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
@@ -183,13 +203,22 @@ $light_gray:#eee;
   background-color: $bg;
   overflow: hidden;
 
+  background-image: url(../../assets/bg1.jpg);
+  background-size: 100%;
+
+  display: flex;
+  align-items: center;
+
   .login-form {
     position: relative;
     width: 520px;
     max-width: 100%;
-    padding: 160px 35px 0;
+    padding: 30px 50px 16px;
     margin: 0 auto;
     overflow: hidden;
+    background-color: #283443 ;
+    border-radius: 8px;//圆角
+    opacity: 0.92;//透明度
   }
 
   .tips {

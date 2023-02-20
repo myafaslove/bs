@@ -13,7 +13,7 @@ const name = defaultSettings.title || 'vue Admin Template' // page title
 // For example, Mac: sudo npm run
 // You can change the port by the following methods:
 // port = 9528 npm run dev OR npm run dev --port = 9528
-const port = process.env.port || process.env.npm_config_port || 9528 // dev port
+const port = process.env.port || process.env.npm_config_port || 8888 // dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
@@ -36,7 +36,32 @@ module.exports = {
       warnings: false,
       errors: true
     },
-    before: require('./mock/mock-server.js')
+    before: require('./mock/mock-server.js'),
+    //写好后端后39行可以注释掉
+
+    // //跨域代理
+    // proxy: {
+    //   '/dc-api': {
+    //     //  将 /dc-api 替换成 跨域地址
+    //     target: 'http://172.21.11.132:18080/default/api/biz/rest',
+    //     // 允许跨域
+    //     changeOrigin: true,
+    //     ws: true,
+    //     pathRewrite: {
+    //       '^/dc-api': ''
+    //     }
+    //   },
+    //   '/api': {
+    //     //  将/api 替换
+    //     target: 'http://localhost:8080',
+    //     // 允许跨域
+    //     changeOrigin: true,
+    //     ws: true,
+    //     pathRewrite: {
+    //       '^/api': ''
+    //     }
+    //   }
+    // }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
@@ -87,7 +112,7 @@ module.exports = {
             .plugin('ScriptExtHtmlWebpackPlugin')
             .after('html')
             .use('script-ext-html-webpack-plugin', [{
-            // `runtime` must same as runtimeChunk name. default is `runtime`
+              // `runtime` must same as runtimeChunk name. default is `runtime`
               inline: /runtime\..*\.js$/
             }])
             .end()
